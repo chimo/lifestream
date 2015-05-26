@@ -96,9 +96,7 @@
         var http = require( "http" ),
             pubSubHubbub = require( "pubsubhubbub" ),
             pubSubSubscriber = pubSubHubbub.createServer( {
-                "callbackUrl": "http://chromic.org:1337/"/*,
-                "secret": "secret" // TODO: do we need this? is it used?
-                */
+                "callbackUrl": "http://chromic.org:1337/" /* TODO: make configurable */
             } );
 
         pubSubSubscriber.on( "error", function( err ) {
@@ -171,9 +169,7 @@
 
                 logger.debug( "feed event" );
 
-                // TODO: do we need make sure we're subscribed to this thing?
-                //       anybody could send (fake) ping request to our callback
-                //       is there any kind of security in the PuSH spec -- HMAC, secret, ...?
+                // Make sure we're subscribed to the feed we got a ping from
                 sqlPool.getConnection( function( err, connection ) {
                     if ( err ) {
                         logger.debug( "[onFeed] Couldn't connect to SQL: " + err.stack );
