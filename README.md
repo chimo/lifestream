@@ -1,6 +1,9 @@
 lifestream
 ==================
 
+Realtime lifestream via PuSH and WebSockets  
+With a minimal bit of parsing logic, you can add any PuSH-enabled source to your lifestream
+
 Status
 -----------------
 
