@@ -1,0 +1,44 @@
+{
+    "port": 1337,
+
+    "db": {
+        "host": "localhost",
+        "name": "lifestream",
+        "user": "lifestream",
+        "password": ""
+    },
+
+    "subs": [
+        {
+            "topic": "",
+            "hub": "",
+            "type": ""
+        },
+        {
+            "topic": "",
+            "hub": "",
+            "type": ""
+        }
+    ],
+
+    "websockets": {
+        "port": 8090
+    },
+
+    "log": {
+        "transports": [
+            {
+                "type": "console",
+                "level": "debug",
+                "handleExceptions": true
+            },
+            {
+                "type": "file",
+                "level": "debug",
+                "handleExceptions": true,
+                "filename": "lifestream.log"
+            }
+        ]
+    }
+}
+

@@ -1,0 +1,17 @@
+{
+    "name": "lifestream",
+    "version": "0.0.1",
+    "description": "Realtime lifestream",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/chimo/lifestream"
+    },
+    "author": "Chimo",
+    "license": "",
+    "dependencies": {
+        "pubsubhubbub": "~0.4.1",
+        "xmldom": "~0.1.19",
+        "mysql": "~2.6.2",
+        "winston": "~1.0.0"
+    }
+}
