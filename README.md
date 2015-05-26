@@ -11,6 +11,8 @@ Demo
 
 [http://sandbox.chromic.org/ls/index.php](http://sandbox.chromic.org/ls/index.php) (Test environment, wiped regularly)
 
+Client source code here: [https://github.com/chimo/lifestream-client](https://github.com/chimo/lifestream-client)
+
 Requirements
 -----------------
 
