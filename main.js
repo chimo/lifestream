@@ -177,7 +177,7 @@
                     }
 
                     connection.query(
-                        "SELECT id, topic, last_ping FROM subscription WHERE topic = ?",
+                        "SELECT id, topic, type, last_ping FROM subscription WHERE topic = ?",
                         [ topic ],
                         function( err, res ) {
                             if ( err ) {
@@ -212,6 +212,7 @@
                                 res.on( "end", function() {
                                     logger.debug( "got data" );
                                     event = sources[ subscription.topic ].parse( subscription, data );
+                                    event.type = subscription.type;
 
                                     if ( event === null ) {
                                         logger.debug( "Got a ping, but nothing to insert" );
