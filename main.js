@@ -111,7 +111,8 @@
              * Sub / Unsub
              */
             pubSubSubscriber.on( "subscribe", function( data ) {
-                var tmpDate = formatDate( new Date() );
+                var tmpDate = formatDate( new Date() ),
+                    type = types[ data.topic ];
 
                 sqlPool.getConnection( function( err, connection ) {
                     if ( err ) {
@@ -123,7 +124,7 @@
                         /* TODO: should we also refresh sub_start, sub_end (?) -- does the hub see it as a "extend my subscription" deal? */
                         "INSERT INTO subscription( topic, huburi, type, secret, state, last_ping, created, modified, sub_start, sub_end ) VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )" +
                         "ON DUPLICATE KEY UPDATE modified=NOW();",
-                        [ data.topic, "FIXME: should be huburi", sub.type, null, "active", null, tmpDate, null, tmpDate, tmpDate ],
+                        [ data.topic, "FIXME: should be huburi", type, null, "active", null, tmpDate, null, tmpDate, tmpDate ],
                         function( err ) {
                             if ( err ) {
                                 logger.debug( "Error inserting subscription: " + err.stack );
@@ -145,13 +146,15 @@
             var subs = config.subs, /* TODO: error handling */
                 len = subs.length,
                 i,
-                sub;
+                sub,
+                types;
 
             for ( i = 0; i < len; i += 1 ) {
                 sub = subs[ i ];
 
                 if ( !sources[ sub.topic] ) {
                     sources[ sub.topic ] = require( "./sources/" + sub.type + ".js" );
+                    types[ sub.topic ] = sub.type;
                 }
 
                 pubSubSubscriber.subscribe( sub.topic, sub.hub );
