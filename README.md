@@ -39,5 +39,5 @@ Run `node ./main.js`
 Problems?
 -----------------
 
-Feel free to [create an issue](https://github.com/chimo/lifestream/issues) or ping my on [GNU social](http://sn.chromic.org), [email](mailto:chimo@chromic.org) or [Twitter](http://twitter.com/chim0)
+Feel free to [create an issue](https://github.com/chimo/lifestream/issues) or ping me on [GNU social](http://sn.chromic.org), [email](mailto:chimo@chromic.org) or [Twitter](http://twitter.com/chim0)
 
