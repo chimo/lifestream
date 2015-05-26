@@ -1,5 +1,8 @@
 {
-    "port": 1337,
+    "callback": {
+        "port": 1337,
+        "url": "http://example.org"
+    },
 
     "db": {
         "host": "localhost",

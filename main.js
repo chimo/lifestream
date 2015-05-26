@@ -96,7 +96,7 @@
         var http = require( "http" ),
             pubSubHubbub = require( "pubsubhubbub" ),
             pubSubSubscriber = pubSubHubbub.createServer( {
-                "callbackUrl": "http://chromic.org:1337/" /* TODO: make configurable */
+                "callbackUrl": config.callback.url + ":" + config.callback.port
             } );
 
         pubSubSubscriber.on( "error", function( err ) {
@@ -265,7 +265,7 @@
         } );
 
         // Start listening for pings
-        pubSubSubscriber.listen( config.port );
+        pubSubSubscriber.listen( config.callback.port );
     };
 
     /**
