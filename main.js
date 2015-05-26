@@ -196,8 +196,8 @@
 
                             // FIXME: tmp exception for GS; we parse .as instead of .atom for now
                             // TODO:  use DOMParser like we do for the blog
-                            if ( topic === "http://sn.chromic.org/api/statuses/user_timeline/1.atom" ) {
-                                url = "http://sn.chromic.org/api/statuses/user_timeline/1.as";
+                            if ( subscription.type === "gnusocial" ) {
+                                url = subscription.topic.replace( /\.atom$/, "as" );
                             }
 
                             // Get feed
