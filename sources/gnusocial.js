@@ -34,7 +34,7 @@
                     break;
                 case "share": /* repeat */
                     event.title = "Repeated a " + event.type;
-                    event.conent = item.content;
+                    event.content = item.content;
                     break;
                 case "post":
                     event.title = "Posted a " + event.type;
