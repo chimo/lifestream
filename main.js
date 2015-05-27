@@ -145,7 +145,7 @@
                 len = subs.length,
                 i,
                 sub,
-                types;
+                types = [];
 
             for ( i = 0; i < len; i += 1 ) {
                 sub = subs[ i ];
@@ -196,8 +196,9 @@
 
                             // FIXME: tmp exception for GS; we parse .as instead of .atom for now
                             // TODO:  use DOMParser like we do for the blog
+
                             if ( subscription.type === "gnusocial" ) {
-                                url = subscription.topic.replace( /\.atom$/, "as" );
+                                url = subscription.topic.replace( /\.atom$/, ".as" );
                             }
 
                             // Get feed
