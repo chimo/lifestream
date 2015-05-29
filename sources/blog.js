@@ -18,7 +18,7 @@
         event.content = "<h2>" + item.getElementsByTagName( "title" )[ 0 ].textContent + "</h2>" +
                         item.getElementsByTagName( "summary" )[0].textContent +
                         "<p><a href='" + event.source + "'>read more...</a></p>";
-        event.type = "article";
+        event.objectType = "article";
         event.verb = "post";
 
         return event;

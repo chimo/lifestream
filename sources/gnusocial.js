@@ -22,31 +22,31 @@
             event.published = item.published;
             /* event.updated = formatDate( item.updated ); */
             event.verb = activityRE.exec( item.verb )[0];
-            event.type = activityRE.exec( item.object.objectType )[0];
+            event.objectType = activityRE.exec( item.object.objectType )[0];
             event.source = item.url;
 
             switch ( event.verb ) {
                 case "favorite":
                     by = /by ([^:]+)/.exec( item.content )[0];
-                    event.title = "Favorited a " + event.type + " by " + by;
+                    event.title = "Favorited a " + event.objectType + " by " + by;
                     event.content = item.object.content;
                     event.source = item.object.url; /* Link to foreign instance (favs don't have local urls) */
                     break;
                 case "share": /* repeat */
-                    event.title = "Repeated a " + event.type;
+                    event.title = "Repeated a " + event.objectType;
                     event.content = item.content;
                     break;
                 case "post":
-                    event.title = "Posted a " + event.type;
+                    event.title = "Posted a " + event.objectType;
 
-                    if ( event.type === "bookmark" ) {
+                    if ( event.objectType === "bookmark" ) {
                         event.content = item.content;
                     } else { /* note, comment */
                         event.content = item.object.content;
                     }
                     break;
                 case "join":
-                    event.title = "Joined a " + event.type;
+                    event.title = "Joined a " + event.objectType;
                     event.content = "<a href='" + item.object.url + "'>" +
                         item.object.portablecontacts_net.displayName + "</a> " +
                         "(" + item.object.portablecontacts_net.preferredUsername + ")<br />" +

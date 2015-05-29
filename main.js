@@ -213,7 +213,6 @@
                                 res.on( "end", function() {
                                     logger.debug( "got data" );
                                     event = sources[ subscription.topic ].parse( subscription, data );
-                                    event.type = subscription.type;
 
                                     if ( event === null ) {
                                         logger.debug( "Got a ping, but nothing to insert" );
@@ -238,12 +237,15 @@
 
                                         connection.query(
                                             "INSERT INTO event( subscription_id, title, content, published, updated, foreign_url, object_type, object_verb ) VALUES( ?, ?, ?, ?, ?, ?, ?, ? );",
-                                            [ subscription.id, event.title, event.content, published, null, event.source, event.type, event.verb ],
+                                            [ subscription.id, event.title, event.content, published, null, event.source, event.objectType, event.verb ],
                                             function( err ) {
                                                 if ( err ) {
                                                     logger.debug( "Error inserting event: " + err.stack );
                                                     return;
                                                 }
+
+                                                // Tell websockets what type of event this is
+                                                event.type = subscription.type;
 
                                                 // Notify websockets
                                                 wss.broadcast( JSON.stringify( event ) );
