@@ -114,7 +114,7 @@
 
                 sqlPool.getConnection( function( err, connection ) {
                     if ( err ) {
-                        logger.debug( "[onSubscribe] Coulnd't connect to SQL: " + err.stack );
+                        logger.debug( "[onSubscribe] Couldn't connect to SQL: " + err.stack );
                         return;
                     }
 
