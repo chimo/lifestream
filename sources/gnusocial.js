@@ -27,8 +27,8 @@
 
             switch ( event.verb ) {
                 case "favorite":
-                    by = /by ([^:]+)/.exec( item.content )[0];
-                    event.title = "Favorited a " + event.objectType + " by " + by;
+                    by = / by ([^:]+)/.exec( item.content )[0];
+                    event.title = "Favorited a " + event.objectType + by;
                     event.content = item.object.content;
                     event.source = item.object.url; /* Link to foreign instance (favs don't have local urls) */
                     break;
