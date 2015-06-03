@@ -50,7 +50,7 @@
                     event.content = "<a href='" + item.object.url + "'>" +
                         item.object.portablecontacts_net.displayName + "</a> " +
                         "(" + item.object.portablecontacts_net.preferredUsername + ")<br />" +
-                        item.object.portablecontacts_net.note;
+                        ( item.object.portablecontacts_net.note || "" );
                     break;
                 case "follow":
                     event.title = "Started following";
