@@ -54,10 +54,10 @@
                     break;
                 case "follow":
                     event.title = "Started following";
-                    event.content = "<a href='" + item.object.url + "'>" +
-                                        "<img src='" + item.object.image.url + "' rel='avatar' alt='" + item.object.displayName + "\'s avatar'>" +
-                                        item.object.displayName +
-                                    "</a>";
+                    event.content = "<a class='h-card u-url' href='" + item.object.url + "'>" +
+                                        "<img class='u-photo' src='" + item.object.image.url + "' alt='" + item.object.displayName + "&#39;s avatar'>" +
+                                        "<span class='p-nickname'>" + item.object.displayName +
+                                    "</span></a>";
                     break;
                 default:
                     event.title = item.title;
