@@ -94,6 +94,7 @@
 
     setupSubscriber = function() {
         var http = require( "http" ),
+            https = require( "https" ),
             pubSubHubbub = require( "pubsubhubbub" ),
             pubSubSubscriber = pubSubHubbub.createServer( {
                 "callbackUrl": config.callback.url + ":" + config.callback.port
@@ -114,7 +115,7 @@
 
                 sqlPool.getConnection( function( err, connection ) {
                     if ( err ) {
-                        logger.debug( "[onSubscribe] Couldn't connect to SQL: " + err.stack );
+                        logger.debug( "[onSubscribe] Coulnd't connect to SQL: " + err.stack );
                         return;
                     }
 
@@ -201,8 +202,7 @@
                                 url = subscription.topic.replace( /\.atom$/, ".as" );
                             }
 
-                            // Get feed
-                            http.get( url, function( res ) {
+                            function foo( res ) {
                                 var data = "",
                                     event;
 
@@ -255,10 +255,23 @@
                                         connection.release();
                                     } );
                                 } );
-                            } ).on( "error", function( e ) {
-                                logger.debug( "Got error trying to fetch topic: " + e.message );
-                                logger.debug( "Topic: " + topic );
-                            } );
+                            }
+
+                            // Get feed
+                            // FIXME: dupe.
+                            if ( url.substr( 0, 8 ) === "https://" ) {
+                                https.get( url, foo )
+                                    .on( "error", function( e ) {
+                                        logger.debug( "Got error trying to fetch topic: " + e.message );
+                                        logger.debug( "Topic: " + topic );
+                                    } );
+                            } else {
+                                http.get( url, foo )
+                                    .on( "error", function( e ) {
+                                        logger.debug( "Got error trying to fetch topic: " + e.message );
+                                        logger.debug( "Topic: " + topic );
+                                    } );
+                            }
                         }
                     );
 
