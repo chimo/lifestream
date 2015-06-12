@@ -9,6 +9,7 @@
     "author": "Chimo",
     "license": "",
     "dependencies": {
+        "ws": "0.7.2",
         "pubsubhubbub": "~0.4.1",
         "xmldom": "~0.1.19",
         "mysql": "~2.6.2",
