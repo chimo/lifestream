@@ -25,6 +25,7 @@
         $commits.each( function() {
             var $commit = $( this ),
                 $link = $commit.find( "a" ).first(),
+                linkText = $link.text(),
                 href = $link.attr( "href" ),
                 $message = $commit.find( ".text-truncate" ).first();
 
@@ -32,7 +33,13 @@
                 href = hostname + href;
             }
 
-            html += "<li><a href='" + href + "'>" + $link.text() + "</a> " +
+            // Gogs always says "View comparison for these 2 commits"
+            // regardless of how many commits there are.
+            if ( linkText.match(/^View comparison/) ) {
+                linkText = "View comparison";
+            }
+
+            html += "<li><a href='" + href + "'>" + linkText + "</a> " +
                 "<span class='commit-message'>" + $message.text() + "</span></li>";
         } );
 
