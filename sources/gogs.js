@@ -28,10 +28,8 @@
                 href = $link.attr( "href" ),
                 $message = $commit.find( ".text-truncate" ).first();
 
-            // TODO: should check for http:// as well
-            //       replace with regex
-            if ( href.substr( 0, 8 ) !== "https://" ) {
-                href = "http://code.chromic.org" + href;
+            if ( !href.match(/^https?:\/\//) ) {
+                href = hostname + href;
             }
 
             html += "<li><a href='" + href + "'>" + $link.text() + "</a> " +
