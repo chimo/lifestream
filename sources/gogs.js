@@ -1,12 +1,12 @@
-// FIMXE: hard-coded hostname
-
 ( function() {
     /*global module: false, require: false*/
     "use strict";
 
     var exports = module.exports = {},
         getTitle,
-        getContent;
+        getContent,
+        urlParser = require( "url" ),
+        hostname;
 
     getTitle = function( $elm ) {
         var $title = $elm.find( ".text-bold" ),
@@ -14,8 +14,8 @@
             $branch = $links.eq( 1 ),
             $repo = $links.eq( 2 );
 
-        return "Pushed to <a href='http://code.chromic.org" + $branch.attr( "href" ) + "'>" + $branch.text() + "</a> at " +
-            "<a href='http://code.chromic.org" + $repo.attr( "href" ) + "'>" + $repo.text() + "</a>";
+        return "Pushed to <a href='" + hostname + $branch.attr( "href" ) + "'>" + $branch.text() + "</a> at " +
+            "<a href='" + hostname + $repo.attr( "href" ) + "'>" + $repo.text() + "</a>";
     };
 
     getContent = function( $elm, $ ) {
@@ -45,7 +45,10 @@
         var event = {},
             cheerio = require( "cheerio" ),
             $ = cheerio.load( data ),
-            $latest = $( ".news" ).first();
+            $latest = $( ".news" ).first(),
+            urlParts = urlParser.parse( subscription.topic );
+
+        hostname = urlParts.protocol + urlParts.host;
 
         event.title = getTitle( $latest );
         event.source = ""; // TODO: Link to standalone page (lifestream event) -- once we create them for all event types(?)
