@@ -49,7 +49,7 @@
     exports.parse = function( subscription, data ) {
         var event = {},
             cheerio = require( "cheerio" ),
-            $ = cheerio.load( data ),
+            $ = cheerio.load( data, { decodeEntities: true } ),
             $latest = $( ".news" ).first(),
             urlParts = urlParser.parse( subscription.topic );
 
