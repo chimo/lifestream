@@ -17,17 +17,17 @@
         /* This is the first time we get data from the hub.
            Only get the latest item. */
         if ( last_ping === null ) {
-            item = data.items[0];
+            item = data.items[ 0 ];
 
             event.published = item.published;
             /* event.updated = formatDate( item.updated ); */
-            event.verb = activityRE.exec( item.verb )[0];
-            event.objectType = activityRE.exec( item.object.objectType )[0];
+            event.verb = activityRE.exec( item.verb )[ 0 ];
+            event.objectType = activityRE.exec( item.object.objectType )[ 0 ];
             event.source = item.url;
 
             switch ( event.verb ) {
                 case "favorite":
-                    by = / by ([^:]+)/.exec( item.content )[0];
+                    by = / by ([^:]+)/.exec( item.content )[ 0 ];
                     event.title = "Favorited a " + event.objectType + by;
                     event.content = item.object.content;
                     event.source = item.object.url; /* Link to foreign instance (favs don't have local urls) */

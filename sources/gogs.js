@@ -29,13 +29,13 @@
                 href = $link.attr( "href" ),
                 $message = $commit.find( ".text-truncate" ).first();
 
-            if ( !href.match(/^https?:\/\//) ) {
+            if ( !href.match( /^https?:\/\// ) ) {
                 href = hostname + href;
             }
 
             // Gogs always says "View comparison for these 2 commits"
             // regardless of how many commits there are.
-            if ( linkText.match(/^View comparison/) ) {
+            if ( linkText.match( /^View comparison/ ) ) {
                 linkText = "View comparison";
             }
 
