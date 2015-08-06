@@ -198,9 +198,9 @@
                             // FIXME: tmp exception for GS; we parse .as instead of .atom for now
                             // TODO:  use DOMParser like we do for the blog
 
-                            if ( subscription.type === "gnusocial" ) {
+                            /*if ( subscription.type === "gnusocial" ) {
                                 url = subscription.topic.replace( /\.atom$/, ".as" );
-                            }
+                            }*/
 
                             function foo( res ) {
                                 var data = "",
