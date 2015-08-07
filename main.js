@@ -93,9 +93,7 @@
     };
 
     setupSubscriber = function() {
-        var http = require( "http" ),
-            https = require( "https" ),
-            pubSubHubbub = require( "pubsubhubbub" ),
+        var pubSubHubbub = require( "pubsubhubbub" ),
             pubSubSubscriber = pubSubHubbub.createServer( {
                 "callbackUrl": config.callback.url + ":" + config.callback.port
             } );
@@ -115,7 +113,7 @@
 
                 sqlPool.getConnection( function( err, connection ) {
                     if ( err ) {
-                        logger.debug( "[onSubscribe] Coulnd't connect to SQL: " + err.stack );
+                        logger.debug( "[onSubscribe] Couldn't connect to SQL: " + err.stack );
                         return;
                     }
 
@@ -181,6 +179,8 @@
                         "SELECT id, topic, type, last_ping FROM subscription WHERE topic = ?",
                         [ topic ],
                         function( err, res ) {
+                            var req = ( url.substr( 0, 8 ) === "https://" ) ? require( "https" ) : require( "http" );
+
                             if ( err ) {
                                 logger.debug( "Couldn't fetch subscription from DB: " + err.stack );
                                 return;
@@ -195,14 +195,7 @@
 
                             subscription = res[ 0 ];
 
-                            // FIXME: tmp exception for GS; we parse .as instead of .atom for now
-                            // TODO:  use DOMParser like we do for the blog
-
-                            /*if ( subscription.type === "gnusocial" ) {
-                                url = subscription.topic.replace( /\.atom$/, ".as" );
-                            }*/
-
-                            function foo( res ) {
+                            function handleResponse( res ) {
                                 var data = "",
                                     event;
 
@@ -257,21 +250,12 @@
                                 } );
                             }
 
-                            // Get feed
-                            // FIXME: dupe.
-                            if ( url.substr( 0, 8 ) === "https://" ) {
-                                https.get( url, foo )
-                                    .on( "error", function( e ) {
-                                        logger.debug( "Got error trying to fetch topic: " + e.message );
-                                        logger.debug( "Topic: " + topic );
-                                    } );
-                            } else {
-                                http.get( url, foo )
-                                    .on( "error", function( e ) {
-                                        logger.debug( "Got error trying to fetch topic: " + e.message );
-                                        logger.debug( "Topic: " + topic );
-                                    } );
-                            }
+                            // HTTP(S) get
+                            req.get( url, handleResponse )
+                                .on( "error", function( e ) {
+                                    logger.debug( "Got error trying to fetch topic: " + e.message );
+                                    logger.debug( "Topic: " + topic );
+                                } );
                         }
                     );
 
