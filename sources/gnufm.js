@@ -13,13 +13,17 @@
             item = doc.getElementsByTagName( "scrobble" )[ 0 ],
             track = item.getElementsByTagName( "track" )[ 0 ],
             artist = item.getElementsByTagName( "artist" )[ 0 ],
-            album = item.getElementsByTagName( "album" )[ 0 ];
+            album = item.getElementsByTagName( "album" )[ 0 ],
+            albumUrl = album.getAttribute( "url" ),
+            albumTitle = album.textContent,
+            onAlbum = (albumUrl && albumTitle) ? " on <a href='" + album.getAttribute( "url" ) + "'>" + album.textContent + "</a>" : "";
 
         event.title = "Listened to";
         event.source = ""; // TODO
         event.content = "<a href='" + track.getAttribute( "url" ) + "'>" + track.textContent + "</a>" +
             " by <a href='" + artist.getAttribute( "url" ) + "'>" + artist.textContent + "</a>" +
-            " on <a href='" + album.getAttribute( "url" ) + "'>" + album.textContent + "</a>";
+            onAlbum;
+
         event.published = item.getElementsByTagName( "published" )[0].textContent;
         event.objectType = "audio";
         event.verb = "listen";
