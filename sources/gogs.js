@@ -18,9 +18,8 @@
             "<a href='" + hostname + $repo.attr( "href" ) + "'>" + $repo.text() + "</a>";
     };
 
-    getContent = function( $elm, $ ) {
-        var $commits = $elm.find( ".content li" ),
-            html = "<ul>";
+    getContent = function( $commits, $ ) {
+        var html = "<ul>";
 
         $commits.each( function() {
             var $commit = $( this ),
@@ -51,14 +50,20 @@
             cheerio = require( "cheerio" ),
             $ = cheerio.load( data, { decodeEntities: true } ),
             $latest = $( ".news" ).first(),
+            $items = $latest.find( ".content li" ), // Commits + optional "compare" link
+            $lastLink = $items.last().find( "a" ), // Either the last commit or the "compare" link
             urlParts = urlParser.parse( subscription.topic );
 
-        hostname = urlParts.protocol + urlParts.host;
+        hostname = urlParts.protocol + "//" + urlParts.host;
 
         event.title = getTitle( $latest );
-        event.source = ""; // TODO: Link to standalone page (lifestream event) -- once we create them for all event types(?)
+
+        // We check if the last link is a "View comparison" link.
+        // If so, use the "href" as the source link. If not, blank url (for now)
+        event.source = ( $lastLink.text().match( /^View comparison/ ) ) ? $lastLink.attr( "href" ) : "";
+
         event.published = $( ".time-since" ).attr( "title" );
-        event.content = getContent( $latest, $ );
+        event.content = getContent( $items, $ );
         event.objectType = "file"; // ?
         event.verb = "update"; // ?
 
