@@ -19,7 +19,8 @@ Client source code here: [https://github.com/chimo/lifestream-client](https://gi
 Requirements
 -----------------
 
-[Node.js](https://nodejs.org/)
+* [Node.js](https://nodejs.org/)
+* [MySQL](http://www.mysql.com/)
 
 Installation
 -----------------
@@ -29,7 +30,9 @@ Run `npm install`
 Configration
 -----------------
 
-Copy `config.dist.json` to `config.json` and fill-in the missing information
+1. Create a MySQL database
+2. Create the tables: `mysql -u username -p database_name < schema.sql`
+3. Copy `config.dist.json` to `config.json` and fill-in the missing information
 
 Launch
 -----------------
