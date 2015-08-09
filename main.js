@@ -18,11 +18,12 @@
         setupSQL;
 
     setupSQL = function() {
-        return sqlPool = mysql.createPool( {
+        return mysql.createPool( {
             host: config.db.host,
             database: config.db.name,
             user: config.db.user,
-            password: config.db.password
+            password: config.db.password,
+            charset: config.db.charset || "UTF8_GENERAL_CI"
         } );
     };
 
