@@ -1,5 +1,5 @@
 ( function() {
-    /*global require: false, JSON: false*/
+    /*global require: false, JSON: false, console: false*/
     "use strict";
 
     var mysql = require( "mysql" ),
@@ -271,16 +271,33 @@
 
     /**
      * Read config file
-     * TODO: error handling
      */
-    config = fs.readFileSync( "./config.json" );
-    config = JSON.parse( config );
+
+    try {
+        config = fs.readFileSync( "./config.json" );
+        config = JSON.parse( config );
+    } catch ( err ) {
+        if ( err.code === "ENOENT" ) {
+            console.log( "Config file not found." );
+
+            return;
+        } else if ( err instanceof SyntaxError ) {
+            console.log(
+                "Config file malformed.\n" +
+                err.message + "\n"
+            );
+
+            return;
+        } else {
+            throw err;
+        }
+    }
+
+    logger = setupLogger();
 
     wss = setupWebSockets();
 
     sqlPool = setupSQL();
-
-    logger = setupLogger();
 
     setupSubscriber();
 }() );
