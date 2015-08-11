@@ -109,7 +109,8 @@
              * Sub / Unsub
              */
             pubSubSubscriber.on( "subscribe", function( data ) {
-                var tmpDate = formatDate( new Date() ),
+                var now = formatDate( new Date() ),
+                    expires = formatDate( new Date( data.lease * 1000 ) ), // 'lease' is in seconds, Date() needs ms
                     type = types[ data.topic ];
 
                 sqlPool.getConnection( function( err, connection ) {
@@ -119,10 +120,9 @@
                     }
 
                     connection.query(
-                        /* TODO: should we also refresh sub_start, sub_end (?) -- does the hub see it as a "extend my subscription" deal? */
                         "INSERT INTO subscription( topic, huburi, type, secret, state, last_ping, created, modified, sub_start, sub_end ) VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )" +
-                        "ON DUPLICATE KEY UPDATE modified=NOW();",
-                        [ data.topic, "FIXME: should be huburi", type, null, "active", null, tmpDate, null, tmpDate, tmpDate ],
+                        "ON DUPLICATE KEY UPDATE modified=NOW(), sub_start=NOW(), sub_end=?;",
+                        [ data.topic, data.hub, type, null, "active", null, now, null, now, expires, expires ],
                         function( err ) {
                             if ( err ) {
                                 logger.debug( "Error inserting subscription: " + err.stack );
