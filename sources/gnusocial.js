@@ -35,10 +35,10 @@
                             .getElementsByTagNameNS( activityNS, "object" )[ 0 ]
                             .getElementsByTagNameNS( activityNS, "object" )[ 0 ]
                             .getElementsByTagNameNS( activityNS, "object-type" )[ 0 ].textContent
-                    );
+                    )[ 0 ];
                 event.content = item
                     .getElementsByTagNameNS( activityNS, "object" )[ 0 ]
-                    .getElementsByTagName( "content" ).textContent;
+                    .getElementsByTagName( "content" )[ 0 ].textContent;
                 break;
             case "post":
                 event.title = "Posted a " + event.objectType;
