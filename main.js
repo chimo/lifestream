@@ -232,7 +232,7 @@
                                         connection.query(
                                             "INSERT INTO event( subscription_id, title, content, published, updated, foreign_url, object_type, object_verb ) VALUES( ?, ?, ?, ?, ?, ?, ?, ? );",
                                             [ subscription.id, event.title, event.content, published, null, event.source, event.objectType, event.verb ],
-                                            function( err ) {
+                                            function( err, result ) {
                                                 if ( err ) {
                                                     logger.debug( "Error inserting event: " + err.stack );
                                                     return;
@@ -240,6 +240,9 @@
 
                                                 // Tell websockets what type of event this is
                                                 event.type = subscription.type;
+
+                                                // Tell websockets the id of the new item we inserted
+                                                event.id = result.insertId;
 
                                                 // Notify websockets
                                                 wss.broadcast( JSON.stringify( event ) );
