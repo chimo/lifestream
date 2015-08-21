@@ -52,7 +52,8 @@
             $latest = $( ".news" ).first(),
             $items = $latest.find( ".content li" ), // Commits + optional "compare" link
             $lastLink = $items.last().find( "a" ), // Either the last commit or the "compare" link
-            urlParts = urlParser.parse( subscription.topic );
+            urlParts = urlParser.parse( subscription.topic ),
+            buggyDate, goodDate;
 
         hostname = urlParts.protocol + "//" + urlParts.host;
 
@@ -62,7 +63,13 @@
         // If so, use the "href" as the source link. If not, blank url (for now)
         event.source = ( $lastLink.text().match( /^View comparison/ ) ) ? $lastLink.attr( "href" ) : "";
 
-        event.published = $( ".time-since" ).attr( "title" );
+        // Attempt to work-around gogs time-since bug
+        // https://github.com/gogits/gogs/issues/1500
+        // TODO: Remove once upstream fixes it
+        buggyDate = new Date( $( ".time-since" ).attr( "title" ) );
+        goodDate = new Date( buggyDate.getTime() + ( buggyDate.getTimezoneOffset() * 60 * 1000 ) );
+        event.published = goodDate.toISOString();
+
         event.content = getContent( $items, $ );
         event.objectType = "file"; // ?
         event.verb = "update"; // ?
