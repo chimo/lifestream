@@ -35,7 +35,11 @@
                             .getElementsByTagNameNS( activityNS, "object" )[ 0 ]
                             .getElementsByTagNameNS( activityNS, "object" )[ 0 ]
                             .getElementsByTagNameNS( activityNS, "object-type" )[ 0 ].textContent
-                    )[ 0 ];
+                    )[ 0 ] +
+                    " by " +
+                    "<a href='" + item.getElementsByTagName( "uri" )[ 0 ].textContent + "'>" +
+                    item.getElementsByTagName( "name" )[ 0 ].textContent +
+                    "</a>";
                 event.content = item
                     .getElementsByTagNameNS( activityNS, "object" )[ 0 ]
                     .getElementsByTagName( "content" )[ 0 ].textContent;
