@@ -17,7 +17,7 @@
             album = item.getElementsByTagName( "album" )[ 0 ],
             albumUrl = album.getAttribute( "url" ),
             albumTitle = album.textContent,
-            onAlbum = (albumUrl && albumTitle) ? " on <a href='" + album.getAttribute( "url" ) + "'>" + album.textContent + "</a>" : "";
+            onAlbum = ( albumUrl && albumTitle ) ? " on <a href='" + album.getAttribute( "url" ) + "'>" + album.textContent + "</a>" : "";
 
         event.title = "Listened to";
         event.source = trackUrl; // TODO
@@ -25,7 +25,7 @@
             " by <a href='" + artist.getAttribute( "url" ) + "'>" + artist.textContent + "</a>" +
             onAlbum;
 
-        event.published = item.getElementsByTagName( "published" )[0].textContent;
+        event.published = item.getElementsByTagName( "published" )[ 0 ].textContent;
         event.objectType = "audio";
         event.verb = "listen";
 

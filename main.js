@@ -150,7 +150,7 @@
             for ( i = 0; i < len; i += 1 ) {
                 sub = subs[ i ];
 
-                if ( !sources[ sub.topic] ) {
+                if ( !sources[ sub.topic ] ) {
                     sources[ sub.topic ] = require( "./sources/" + sub.type + ".js" );
                     types[ sub.topic ] = sub.type;
                 }
