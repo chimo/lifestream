@@ -45,14 +45,14 @@
         return html + "</ul>";
     };
 
-    exports.parse = function( subscription, data ) {
+    exports.parse = function( data, topic ) {
         var event = {},
             cheerio = require( "cheerio" ),
             $ = cheerio.load( data, { decodeEntities: true } ),
             $latest = $( ".news" ).first(),
             $items = $latest.find( ".content li" ), // Commits + optional "compare" link
             $lastLink = $items.last().find( "a" ), // Either the last commit or the "compare" link
-            urlParts = urlParser.parse( subscription.topic );
+            urlParts = urlParser.parse( topic );
 
         hostname = urlParts.protocol + "//" + urlParts.host;
 

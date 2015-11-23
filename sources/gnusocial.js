@@ -7,7 +7,7 @@
     // TODO: cleanup
     // TODO: error handling
 
-    exports.parse = function( subscription, data ) {
+    exports.parse = function( data ) {
         var activityRE = /([^\/]+)$/,
             DOMParser = require( "xmldom" ).DOMParser,
             doc = new DOMParser().parseFromString( data ),

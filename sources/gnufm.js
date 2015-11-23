@@ -6,7 +6,7 @@
 
     var exports = module.exports = {};
 
-    exports.parse = function( subscription, data ) {
+    exports.parse = function( data ) {
         var event = {},
             DOMParser = require( "xmldom" ).DOMParser,
             doc = new DOMParser().parseFromString( data ),
