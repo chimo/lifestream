@@ -20,7 +20,7 @@
             onAlbum = ( albumUrl && albumTitle ) ? " on <a href='" + album.getAttribute( "url" ) + "'>" + album.textContent + "</a>" : "";
 
         event.title = "Listened to";
-        event.source = trackUrl; // TODO
+        event.foreign_url = trackUrl; // TODO
         event.content = "<a href='" + trackUrl + "'>" + track.textContent + "</a>" +
             " by <a href='" + artist.getAttribute( "url" ) + "'>" + artist.textContent + "</a>" +
             onAlbum;

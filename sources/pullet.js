@@ -13,7 +13,7 @@
         item = doc.getElementsByTagName( "entry" )[ 0 ];
 
         event.title = "Checked-in to a location";
-        event.source = item.getElementsByTagName( "link" )[ 0 ].getAttribute( "href" );
+        event.foreign_url = item.getElementsByTagName( "link" )[ 0 ].getAttribute( "href" );
         event.published = item.getElementsByTagName( "published" )[ 0 ].textContent;
         event.content = item.getElementsByTagName( "content" )[ 0 ].textContent;
         event.objectType = "place";

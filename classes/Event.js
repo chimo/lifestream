@@ -57,7 +57,7 @@
                     that.content,
                     that.published,
                     null,
-                    that.source,
+                    that.foreign_url,
                     that.objectType,
                     that.verb
                 ],

@@ -60,7 +60,7 @@
 
         // We check if the last link is a "View comparison" link.
         // If so, use the "href" as the source link. If not, blank url (for now)
-        event.source = ( $lastLink.text().match( /^View comparison/ ) ) ? $lastLink.attr( "href" ) : "";
+        event.foreign_url = ( $lastLink.text().match( /^View comparison/ ) ) ? $lastLink.attr( "href" ) : "";
 
         event.published = $( ".time-since" ).attr( "title" );
         event.content = getContent( $items, $ );

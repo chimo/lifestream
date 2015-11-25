@@ -17,7 +17,7 @@
         event.title = "Posted an image";
 
         // FIXME: should fetch based on "type" attr, not node position
-        event.source = links[ 0 ].getAttribute( "href" );
+        event.foreign_url = links[ 0 ].getAttribute( "href" );
         img = "<img src='" + links[ 1 ].getAttribute( "href" ) + "'>";
 
         event.published = item.getElementsByTagName( "updated" )[ 0 ].textContent;

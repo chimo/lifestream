@@ -20,7 +20,7 @@
         event.published = item.getElementsByTagName( "published" )[ 0 ].textContent;
         event.verb = activityRE.exec( item.getElementsByTagNameNS( activityNS, "verb" )[ 0 ].textContent )[ 0 ];
         event.objectType = activityRE.exec( item.getElementsByTagNameNS( activityNS, "object-type" )[ 0 ].textContent )[ 0 ];
-        event.source = item.getElementsByTagName( "link" )[ 0 ].getAttribute( "href" );
+        event.foreign_url = item.getElementsByTagName( "link" )[ 0 ].getAttribute( "href" );
 
         switch ( event.verb ) {
             case "favorite":
