@@ -9,7 +9,7 @@
         hostname;
 
     getTitle = function( $elm ) {
-        var $title = $elm.find( ".text-bold" ),
+        var $title = $elm.find( ".news > p" ),
             $links = $title.find( "a" ),
             $branch = $links.eq( 1 ),
             $repo = $links.eq( 2 );
@@ -26,7 +26,7 @@
                 $link = $commit.find( "a" ).first(),
                 linkText = $link.text(),
                 href = $link.attr( "href" ),
-                $message = $commit.find( ".text-truncate" ).first();
+                $message = $commit.find( ".text" ).first();
 
             if ( !href.match( /^https?:\/\// ) ) {
                 href = hostname + href;
@@ -49,7 +49,7 @@
         var event = {},
             cheerio = require( "cheerio" ),
             $ = cheerio.load( data, { decodeEntities: true } ),
-            $latest = $( ".news" ).first(),
+            $latest = $( ".feeds > .news" ).first(),
             $items = $latest.find( ".content li" ), // Commits + optional "compare" link
             $lastLink = $items.last().find( "a" ), // Either the last commit or the "compare" link
             urlParts = urlParser.parse( topic );
