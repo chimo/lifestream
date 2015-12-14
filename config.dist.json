@@ -28,6 +28,13 @@
         "port": 8090
     },
 
+    "secure_websockets": {
+        "port": 8091,
+        "key": "/path/to/your/ssl.key",
+        "cert": "/path/to/your/ssl.crt",
+        "ca": "/path/to/your/chain.pem"
+    },
+
     "log": {
         "transports": [
             {

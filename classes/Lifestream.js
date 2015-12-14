@@ -8,6 +8,7 @@
         pubSubHubbub = require( "pubsubhubbub" ),
         extend = require( "extend" ),
         Subscription = require( "./Subscription.js" ),
+        fs = require( "fs" ),
         /* Utils: */
         format_date,
         http_get,
@@ -25,7 +26,12 @@
 
         // Setup things
         that.sql = that._setupSQL();
-        that.wss = that._setupWebsockets();
+        that.ws = that._setupWebsockets();
+
+        if ( that.config.secure_websockets ) {
+            that.wss = that._setupSecureWebsockets();
+        }
+
         that.subscriber = that._setupSubscriber();
         that.subscriptions = [];
 
@@ -114,7 +120,34 @@
      * @returns {Object} websocket
      */
     Lifestream.prototype._setupWebsockets = function() {
-        var wss = new WebSocketServer( { port: this.config.websockets.port } );
+        var ws = new WebSocketServer( { port: this.config.websockets.port } );
+
+        ws.broadcast = function broadcast( data ) {
+            ws.clients.forEach( function each( client ) {
+                client.send( data );
+            } );
+        };
+
+        return ws;
+    };
+
+    /**
+     * [[Description]]
+     * @returns {[[Type]]} [[Description]]
+     */
+    Lifestream.prototype._setupSecureWebsockets = function() {
+        var app,
+            configs = this.config.secure_websockets,
+            https = require( "https" ),
+            wss;
+
+        app = https.createServer( {
+            key: fs.readFileSync( configs.key ),
+            cert: fs.readFileSync( configs.cert ),
+            ca: fs.readFileSync( configs.ca )
+        } ).listen( configs.port );
+
+        wss = new WebSocketServer( { server: app } );
 
         wss.broadcast = function broadcast( data ) {
             wss.clients.forEach( function each( client ) {
@@ -211,6 +244,7 @@
                         event.id = result.insertId;
 
                         // Notify websockets
+                        that.ws.broadcast( JSON.stringify( event ) );
                         that.wss.broadcast( JSON.stringify( event ) );
                     } );
                 } );
