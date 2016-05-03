@@ -32,12 +32,6 @@
                 href = hostname + href;
             }
 
-            // Gogs always says "View comparison for these 2 commits"
-            // regardless of how many commits there are.
-            if ( linkText.match( /^View comparison/ ) ) {
-                linkText = "View comparison";
-            }
-
             html += "<li><a href='" + href + "'>" + linkText + "</a> " +
                 "<span class='commit-message'>" + $message.text() + "</span></li>";
         } );
@@ -51,6 +45,7 @@
             $ = cheerio.load( data, { decodeEntities: true } ),
             $latest = $( ".feeds > .news" ).first(),
             $items = $latest.find( ".content li" ), // Commits + optional "compare" link
+            $firstLink = $items.first().find( "a" ), // First commit in the list
             $lastLink = $items.last().find( "a" ), // Either the last commit or the "compare" link
             urlParts = urlParser.parse( topic );
 
@@ -58,9 +53,15 @@
 
         event.title = getTitle( $latest );
 
-        // We check if the last link is a "View comparison" link.
-        // If so, use the "href" as the source link. If not, blank url (for now)
-        event.foreign_url = ( $lastLink.text().match( /^View comparison/ ) ) ? hostname + $lastLink.attr( "href" ) : "";
+        // The last link is a "View comparison" link, or there's only one commit in the list.
+        // In both cases, we use that as a permalink.
+        if ( $lastLink.text().match( /^View comparison/ ) || $firstLink.is( $lastLink ) ) {
+            event.foreign_url = hostname + $lastLink.attr( "href" );
+        } else { // The last link is a commit, we'll have to build the "compare" URL ourselves
+            event.foreign_url = hostname +
+                $firstLink.attr( "href" ).replace( "/commit/", "/compare/" ) + "..." + // Change from 'commit' URL to 'compare'
+                $lastLink.attr( "href" ).split( "/" ).splice( -1, 1 ); // Get the hash of the last commit
+        }
 
         event.published = $( ".time-since" ).attr( "title" );
         event.content = getContent( $items, $ );
