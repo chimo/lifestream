@@ -15,6 +15,7 @@
             by,
             activityNS = "http://activitystrea.ms/spec/1.0/",
             pocoNS = "http://portablecontacts.net/spec/1.0",
+            reply_to = item.getElementsBytagName( "link" )[ 2 ].getAttribute( "href" );
             event = {};
 
         event.published = item.getElementsByTagName( "published" )[ 0 ].textContent;
@@ -25,7 +26,7 @@
         switch ( event.verb ) {
             case "favorite":
                 by = / by ([^:]+)/.exec( item.getElementsByTagName( "content" )[ 0 ].textContent )[ 0 ];
-                event.title = "Favorited a " + event.objectType + by;
+                event.title = "Favorited a <a class='u-like-of' href='" + reply_to + "'>" + event.objectType + "</a>" + by;
                 event.content = item.getElementsByTagNameNS( activityNS, "object" )[ 0 ].getElementsByTagName( "content" )[ 0 ].textContent;
                 break;
             case "share": /* repeat */
