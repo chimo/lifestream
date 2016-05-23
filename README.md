@@ -12,7 +12,7 @@ Pre-alpha, subject to change drastically, run at own risks ;)
 Demo
 -----------------
 
-[http://sandbox.chromic.org/ls/index.php](http://sandbox.chromic.org/ls/index.php) (Test environment, wiped regularly)
+[https://chromic.org](https://chromic.org) (The "Realtime Updates" section)
 
 Client source code here: [https://github.com/chimo/lifestream-client](https://github.com/chimo/lifestream-client)
 
