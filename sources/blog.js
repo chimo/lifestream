@@ -18,8 +18,8 @@
         event.content = "<h2>" + item.getElementsByTagName( "title" )[ 0 ].textContent + "</h2>" +
                         item.getElementsByTagName( "summary" )[ 0 ].textContent +
                         "<p><a href='" + event.foreign_url + "'>read more...</a></p>";
-        event.objectType = "article";
-        event.verb = "post";
+        event.object_type = "article";
+        event.object_verb = "post";
 
         return event;
     };

@@ -26,8 +26,8 @@
             onAlbum;
 
         event.published = item.getElementsByTagName( "published" )[ 0 ].textContent;
-        event.objectType = "audio";
-        event.verb = "listen";
+        event.object_type = "audio";
+        event.object_verb = "listen";
 
         return event;
     };

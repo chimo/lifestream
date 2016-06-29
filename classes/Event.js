@@ -58,8 +58,8 @@
                     that.published,
                     null,
                     that.foreign_url,
-                    that.objectType,
-                    that.verb
+                    that.object_type,
+                    that.object_verb
                 ],
                 callback
             );

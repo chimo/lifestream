@@ -65,8 +65,8 @@
 
         event.published = $( ".time-since" ).attr( "title" );
         event.content = getContent( $items, $ );
-        event.objectType = "file"; // ?
-        event.verb = "update"; // ?
+        event.object_type = "file"; // ?
+        event.object_verb = "update"; // ?
 
         return event;
     };

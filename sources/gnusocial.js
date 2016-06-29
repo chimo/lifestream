@@ -19,15 +19,15 @@
             event = {};
 
         event.published = item.getElementsByTagName( "published" )[ 0 ].textContent;
-        event.verb = activityRE.exec( item.getElementsByTagNameNS( activityNS, "verb" )[ 0 ].textContent )[ 0 ];
-        event.objectType = activityRE.exec( item.getElementsByTagNameNS( activityNS, "object-type" )[ 0 ].textContent )[ 0 ];
+        event.object_verb = activityRE.exec( item.getElementsByTagNameNS( activityNS, "verb" )[ 0 ].textContent )[ 0 ];
+        event.object_type = activityRE.exec( item.getElementsByTagNameNS( activityNS, "object-type" )[ 0 ].textContent )[ 0 ];
         event.foreign_url = item.getElementsByTagName( "link" )[ 0 ].getAttribute( "href" );
 
-        switch ( event.verb ) {
+        switch ( event.object_verb ) {
             case "favorite":
                 reply_to = item.getElementsByTagName( "link" )[ 2 ].getAttribute( "href" );
                 by = / by ([^:]+)/.exec( item.getElementsByTagName( "content" )[ 0 ].textContent )[ 0 ];
-                event.title = "Favorited a <a class='u-like-of' href='" + reply_to + "'>" + event.objectType + "</a>" + by;
+                event.title = "Favorited a <a class='u-like-of' href='" + reply_to + "'>" + event.object_type + "</a>" + by;
                 event.content = item.getElementsByTagNameNS( activityNS, "object" )[ 0 ].getElementsByTagName( "content" )[ 0 ].textContent;
                 break;
             case "share": /* repeat */
@@ -47,16 +47,16 @@
                     .getElementsByTagName( "content" )[ 0 ].textContent;
                 break;
             case "post":
-                event.title = "Posted a " + event.objectType;
+                event.title = "Posted a " + event.object_type;
 
-                if ( event.objectType === "bookmark" ) {
+                if ( event.object_type === "bookmark" ) {
                     event.content = item.getElementsByTagNameNS( activityNS, "object" )[ 0 ].getElementsByTagName( "content" )[ 0 ].textContent;
                 } else { /* note, comment */
                     event.content = item.getElementsByTagName( "content" )[ 0 ].textContent;
                 }
                 break;
             case "join":
-                event.title = "Joined a " + event.objectType;
+                event.title = "Joined a " + event.object_type;
                 event.content = "<a href='" +
                     item
                         .getElementsByTagNameNS( activityNS, "object" )[ 0 ]

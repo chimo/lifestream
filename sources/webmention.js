@@ -16,8 +16,8 @@
         event.foreign_url = item.getElementsByTagName( "link" )[ 0 ].getAttribute( "href" );
         event.published = item.getElementsByTagName( "published" )[ 0 ].textContent;
         event.content = item.getElementsByTagName( "content" )[ 0 ].textContent;
-        event.objectType = "article";
-        event.verb = "like"; // FIXME: This file is 'webmention' but this says 'like'
+        event.object_type = "article";
+        event.object_verb = "like"; // FIXME: This file is 'webmention' but this says 'like'
 
         return event;
     };

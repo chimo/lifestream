@@ -34,8 +34,8 @@
 
         event.content = contentTitle + event.content + "<br>" + img;
 
-        event.objectType = "image";
-        event.verb = "post";
+        event.object_type = "image";
+        event.object_verb = "post";
 
         return event;
     };
