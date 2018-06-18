@@ -161,7 +161,8 @@
      * @returns {Object} websocket
      */
     Lifestream.prototype._setupWebsockets = function() {
-        var ws = new WebSocketServer( { port: this.config.websockets.port } );
+        var configs = this.config.websockets,
+            ws = new WebSocketServer( { port: configs.port, host: configs.host } );
 
         ws.broadcast = function broadcast( data ) {
             ws.clients.forEach( function each( client ) {
@@ -186,7 +187,7 @@
             key: fs.readFileSync( configs.key ),
             cert: fs.readFileSync( configs.cert ),
             ca: fs.readFileSync( configs.ca )
-        } ).listen( configs.port );
+        } ).listen( configs.port, configs.host );
 
         wss = new WebSocketServer( { server: app } );
 
