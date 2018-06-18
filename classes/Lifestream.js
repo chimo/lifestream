@@ -76,17 +76,6 @@
         that.subscriber = that._setupSubscriber();
         that.subscriptions = [];
 
-        // Subscribe to things
-        that.config.subs.forEach( function( sub ) {
-            var subscription = new Subscription( {
-                topic: sub.topic,
-                huburi: sub.hub,
-                type: sub.type
-            } );
-
-            that.subscriptions[ sub.topic ] = subscription;
-            that.subscribe( subscription );
-        } );
     };
 
     /**
@@ -237,6 +226,20 @@
             subscriber = pubSubHubbub.createServer( {
                 "callbackUrl": callback.url + ":" + callback.port
             } );
+
+        subscriber.on( "listen", function() {
+            // Subscribe to things
+            that.config.subs.forEach( function( sub ) {
+                var subscription = new Subscription( {
+                    topic: sub.topic,
+                    huburi: sub.hub,
+                    type: sub.type
+                } );
+
+                that.subscriptions[ sub.topic ] = subscription;
+                that.subscribe( subscription );
+            } );
+        } );
 
         subscriber.on( "error", function() {
             console.log( "error" );
