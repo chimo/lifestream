@@ -9,6 +9,7 @@
         extend = require( "extend" ),
         Subscription = require( "./Subscription.js" ),
         fs = require( "fs" ),
+        winston = require( "winston" ),
         /* Utils: */
         format_date,
         http_get,
@@ -23,6 +24,46 @@
 
         // Set config values
         that.config = extend( true, Lifestream.defaults, options );
+
+        // Setup logger
+        that.logger = ( function() {
+            var transports = [],
+                transport,
+                len,
+                i,
+                type,
+                logger;
+
+            if ( !that.config.log || !that.config.log.transports ) {
+                logger = {};
+                logger.debug = function() { };
+                logger.log = logger.debug;
+                logger.info = logger.debug;
+
+                return logger;
+            }
+
+            for ( i = 0, len = that.config.log.transports.length; i < len; i += 1 ) {
+                transport = that.config.log.transports[ i ];
+
+                type = transport.type || "Console";
+                type = type.charAt( 0 ).toUpperCase() + type.slice( 1 ); /* ucfirst() */
+
+                delete transport.type;
+
+                // TODO: Handle cases where call() fails due to bad "type" value
+                transports.push( new winston.transports[ type ]( transport ) )
+            }
+
+            logger = new ( winston.Logger )(
+                    {
+                        transports: transports,
+                        exitOnError: false
+                    }
+                );
+
+            return logger;
+        }() );
 
         // Setup things
         that.sql = that._setupSQL();
@@ -162,7 +203,8 @@
      * After subscription
      */
     Lifestream.prototype._subscribed = function( subscription, data ) {
-        var now = new Date(),
+        var lifestream = this,
+            now = new Date(),
             expires = new Date( data.lease * 1000 ), // 'lease' is in seconds, Date() needs ms
             timeUntilExpiration = Math.max( expires - now, 1000 * 60 * 60 ); // FIXME: My GS lease is messed up
 
@@ -177,13 +219,11 @@
         // Insert/update in DB
         subscription.insert( this.sql, function( err ) {
             if ( err ) {
-                /* FIXME: logger.debug( "Error inserting subscription: " + err.stack ); */
-                console.log( "Error inserting subscription: " + err.stack );
+                lifestream.logger.debug( "Error inserting subscription: " + err.stack );
                 return;
             }
 
-            /* FIXME: logger.debug( "Inserted subscription in SQL table" ); */
-            console.log( "Inserted subscription in SQL table" );
+            lifestream.logger.debug( "Inserted subscription '" + subscription.topic + "' in SQL table" );
         } );
     };
 
@@ -210,8 +250,7 @@
 
             Subscription.getKV( "topic",  topic, that.sql, function( subscription ) {
                 if ( subscription === null ) {
-                    /* FIXME: logger.debug( "Sub doesn't exist" ); */
-                    console.log( "Sub doesn't exist" );
+                    that.logger.debug( "Sub doesn't exist" );
                     return;
                 }
 
@@ -219,10 +258,8 @@
                     var event = subscription.getEvent( data, topic );
 
                     if ( event === null ) {
-                        /* FIXME: logger.debug( "Got a ping, but nothing to insert" );
-                        logger.debug( "Topic: " + topic ); */
-                        console.log( "Got a ping, but nothing to insert" );
-                        console.log( "Topic: " + topic );
+                        that.logger.debug( "Got a ping, but nothing to insert" );
+                        that.logger.debug( "Topic: " + topic );
 
                         return;
                     }
@@ -232,8 +269,7 @@
 
                     event.insert( that.sql, function( err, result ) {
                         if ( err ) {
-                            /* FIXME: logger.debug( "Error inserting event: " + err.stack ); */
-                            console.log( "Error inserting event: " + err.stack );
+                            that.logger.debug( "Error inserting event: " + err.stack );
                             return;
                         }
 
