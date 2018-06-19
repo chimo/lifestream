@@ -13,6 +13,8 @@
         /* Utils: */
         format_date,
         http_get,
+        http_post,
+        ping_hub,
         _setTimeout;
 
     /**
@@ -286,6 +288,11 @@
                         // Notify websockets
                         that.ws.broadcast( JSON.stringify( event ) );
                         that.wss.broadcast( JSON.stringify( event ) );
+
+                        // Notify hub that our topic(s) have been updated
+                        that.config.pubs.forEach( function( pub ) {
+                            ping_hub( pub.hub, pub.topic );
+                        } );
                     } );
                 } );
             } );
@@ -297,6 +304,46 @@
     };
 
     // ############# UTILS #############
+
+    ping_hub = function( hub, topic ) {
+        var post_data,
+            post_options,
+            post_req,
+            req = require( "https" ), // TODO: support http hubs
+            querystring = require( "querystring" );
+
+        post_data = querystring.stringify( {
+            "hub.mode": "publish",
+            "hub.url": topic
+        } );
+
+        console.log( "POST data: " + post_data );
+
+        post_options = {
+            host: hub,
+            port: 443, // TODO: support http hubs
+            followAllRedirects: true,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+                "Content-Length": post_data.length
+            }
+        };
+
+        post_req = req.request(post_options, function( res ) {
+            res.setEncoding( "utf8" );
+            res.on( "data", function ( chunk ) {
+                console.log( "Response: " + chunk );
+            });
+        });
+
+        post_req.on( "error", function ( e ) {
+            console.log( e );
+        } );
+
+        post_req.write( post_data );
+        post_req.end();
+    };
 
     // From: https://developer.mozilla.org/en-US/docs/Web/API/WindowTimers/setTimeout#A_possible_solution
     // TODO: We don't need to keep original functionality since we're calling it a different name
@@ -348,6 +395,31 @@
         };
 
         req.get( url, handleResponse )
+            .on( "error", function( e ) {
+                /* FIXME: logger.debug( "Error trying to fetch topic: " + e.message );
+                logger.debug( "Topic: " + url ); */
+                console.log( "Got error trying to fetch topic: " + e.message );
+                console.log( "Topic: " + url );
+            } );
+    };
+
+    http_post = function( url, callback ) {
+        var req = ( url.substr( 0, 8 ) === "https://" ) ? require( "https" ) : require( "http" ),
+            handleResponse;
+
+        handleResponse = function( response ) {
+            var data = "";
+
+            response.on( "data", function( chunk ) {
+                data += chunk;
+            } );
+
+            response.on( "end", function() {
+                callback( data );
+            } );
+        };
+
+        req.post( url, handleResponse )
             .on( "error", function( e ) {
                 /* FIXME: logger.debug( "Error trying to fetch topic: " + e.message );
                 logger.debug( "Topic: " + url ); */

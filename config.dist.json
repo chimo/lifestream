@@ -11,6 +11,11 @@
         "password": ""
     },
 
+    "pubs": [
+        "hub": "",
+        "topic": ""
+    ],
+
     "subs": [
         {
             "topic": "",
