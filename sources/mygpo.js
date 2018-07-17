@@ -8,9 +8,10 @@
         var event = {},
             item,
             json = null,
-            html = '',
+            html = "",
             showdown  = require( "showdown" ),
-            converter = new showdown.Converter();
+            converter = new showdown.Converter(),
+            episodeDescHtml = "";
 
         try {
             json = JSON.parse( data );
@@ -20,8 +21,10 @@
             return null;
         }
 
-        item = json.data.episodes[0]; // TODO: Error handling
+        item = json.episodes[ 0 ]; // TODO: Error handling
 
+        // FIXME: We probably shouldn't blindly trust the markdown coming from mygpo
+        // TODO: Sanitize resulting HTML to be safe
         episodeDescHtml = converter.makeHtml( item.episode.description );
 
         event.title = "Listened to";
@@ -31,13 +34,13 @@
             item.podcast.homepage  + "'>" + item.podcast.title + "</a></h3>";
 
         html += "<div class='podcast__content episode'><h4 class='episode__title'>" +
-            "<a href='" + item.episode.hompage + "'>" + item.episode.title + "</a></h4>";
+            "<a href='" + item.episode.homepage + "'>" + item.episode.title + "</a></h4>";
 
         html += episodeDescHtml + "</div></div>";
 
         event.content = html;
 
-        var published = new Date(item.timestamp);
+        var published = new Date(item.timestamp + "+0000"); // This mygpo timestamp is UTC
         event.published = published.toISOString();
 
         event.object_type = "audio";
